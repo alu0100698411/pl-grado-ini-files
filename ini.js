@@ -1,7 +1,12 @@
 "use strict"; // Use ECMAScript 5 strict mode in browsers that support it
 
+
+
 $(document).ready(function() {
    $("#fileinput").change(calculate);
+ 	var dropZone = document.getElementById('drop_zone');
+	dropZone.addEventListener('dragover', handleDragOver, false);
+	dropZone.addEventListener('drop', handleFileSelect, false);
 });
 
 function calculate(evt) {
@@ -77,4 +82,48 @@ function lexer(input) {
   }
   return out;
 }
+
+
+  function handleFileSelect(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    var files = evt.dataTransfer.files; // FileList object.
+
+    // files is a FileList of File objects. List some properties.
+    var output = [];
+    for (var i = 0, f; f = files[i]; i++) {
+		    var r = new FileReader();
+			r.onload = function(e) { 
+			  var contents = e.target.result;
+			  
+			  var tokens = lexer(contents);
+			  var pretty = tokensToString(tokens);
+			  
+			  out.className = 'unhidden';
+			  var tableRow = document.createElement('tr');
+			  var tableDataInput = document.createElement('td');
+			  var tableDataOutput = document.createElement('td');
+			  var input = document.createElement('pre');
+			  input.className = 'input';
+			  input.innerHTML = contents;
+			  var output = document.createElement('pre');
+			  output.className = 'output';
+			  output.innerHTML = pretty;
+			  
+			  tableDataInput.appendChild(input);
+			  tableDataOutput.appendChild(output);
+			  tableRow.appendChild(tableDataInput);
+			  tableRow.appendChild(tableDataOutput);
+			  document.getElementById("tabla_resultados").appendChild(tableRow);
+			}
+			r.readAsText(f);
+    }
+  }
+
+  function handleDragOver(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+  }
 

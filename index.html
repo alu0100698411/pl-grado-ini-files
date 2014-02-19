@@ -12,21 +12,19 @@
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
      <script type="text/javascript" src="ini.js"></script>
+
   </head>
   <body>
     <h1>INI files</h1>
+	
+	<div id="drop_zone">Drop files here</div>
+	<br/>
+
+
     <input type="file" id="fileinput" />
     <div id="out" class="hidden">
-    <table>
-      <tr><th>Original</th><th>Tokens</th></tr>
-      <tr>
-        <td>
-          <pre class="input" id="initialinput"></pre>
-        </td>
-        <td>
-          <pre class="output" id="finaloutput"></pre>
-        </td>
-      </tr>
+    <table id="tabla_resultados">
+
     </table>
     </div>
   </body>

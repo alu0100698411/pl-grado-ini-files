@@ -10,6 +10,15 @@ html *
     border: 1px solid #000;
     margin: 10px 5px 0 0;
   }
+  
+ #drop_zone{
+	width:100%;
+    background-color: black;
+	border:
+    color: white;
+    padding: 40px 50px;
+    text-align: center;
+}
 
 h1            { text-align: center; font-size: x-large; }
 th, td        { vertical-align: top; text-align: left; }   
