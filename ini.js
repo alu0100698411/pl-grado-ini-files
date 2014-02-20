@@ -36,9 +36,11 @@ function lexer(input) {
   var blanks         = /^\s+/;
   var iniheader      = /^\[([^\]\r\n]+)\]/;
   var comments       = /^[;#](.*)/;
-  var nameEqualValue = /^([^=;\r\n]+)=([^;\r\n\\#]*)(?:#.*)?/;
-  var multiLine = /^\\\s*(?:#[^\n]*)?\n([^\\;#\r\n]*)(?:#.*)?/;;
-  var multiLineComment = /(#[^\n]*)/g ;
+  var nameEqualValue = /^([^=;\r\n]+)=("?[^;\r\n\\#]*"?)(?:[;#].*)?/;
+  var multiLine = /^\\\s*(?:[;#][^\n]*)?\n([^\\;#\r\n]*)(?:[;#].*)?/;
+  var multiLineQuotes = /^([^=;\r\n]+)=\s*"([^"]*)?/;
+  var multiLineQuotesContent = /^([^"].*)/;
+  var multiLineComment = /([#;][^\n]*)/g ;
   var any            = /^(.|\n)+/;
 
   var out = [];
@@ -56,7 +58,27 @@ function lexer(input) {
     else if (m = comments.exec(input)) {
       input = input.substr(m.index+m[0].length);
       out.push({ type: 'comments', match: m });
-    }
+    }else if(m = multiLineQuotes.exec(input)){
+		var linea = m;
+		input = input.substr(m.index+m[0].length);
+	
+		while(m = multiLineQuotesContent.exec(input)){
+			linea[0] += ' '+m[0];
+			linea[linea.length-1] += m[1];
+			input = input.substr(m.index+m[0].length);		
+		}
+		linea[0] += '"';
+		input = input.substr(1);	
+		linea[0] = linea[0].replace(/\\/g,' ');
+		linea[0] = linea[0].replace(/\n/g,' ');
+		linea[0] = linea[0].replace(/\r/g,' ');
+		linea[2] = linea[2].replace(/\\/g,' ');
+		linea[2] = linea[2].replace(/\n/g,' ');
+		linea[2] = linea[2].replace(/\r/g,' ');
+		out.push({ type: 'nameEqualValue', match: linea });
+		linea = null;
+
+	}
 	else if (m = nameEqualValue.exec(input)) {
 		var linea = m;
 		var comentarios = new Array();

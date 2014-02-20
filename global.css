@@ -45,6 +45,7 @@ span.header { background-color: blue }
 span.comments { background-color: orange }
 span.blanks { background-color: green }
 span.nameEqualValue { background-color: cyan }
+span.nameEqualComments{background-color: yellow}
 span.error { background-color: red }
 
 body
