@@ -37,6 +37,8 @@ function lexer(input) {
   var iniheader      = /^\[([^\]\r\n]+)\]/;
   var comments       = /^[;#](.*)/;
   var nameEqualValue = /^([^=;\r\n]+)=([^;\r\n]*)/;
+  var multiLineSupport = /\\$/;
+  var multiLine = /^([^=;\r\n\\]+)(?:\\)?/;
   var any            = /^(.|\n)+/;
 
   var out = [];
@@ -55,10 +57,19 @@ function lexer(input) {
       input = input.substr(m.index+m[0].length);
       out.push({ type: 'comments', match: m });
     }
-    else if (m = nameEqualValue.exec(input)) {
-      /* while (match casa con /\\$/) concatena la siguiente línea */
-      input = input.substr(m.index+m[0].length);
-      out.push({ type: 'nameEqualValue', match: m });
+	else if (m = nameEqualValue.exec(input)) {
+	  var line = m;
+	  input = input.substr(m.index+m[0].length);
+	  while(m = multiLineSupport.exec(m[0])){
+			if(m = blanks.exec(input)){//LIMPIAMOS EL RETORNO DE CARRO DEL INPUT
+				input = input.substr(m.index+m[0].length);
+			}
+			if(m = multiLine.exec(input)){
+				input = input.substr(m.index+m[0].length);
+				line.push.apply(line, m);			
+			}				
+	  }
+	  out.push({ type: 'nameEqualValue', match: line });
     }
     else if (m = any.exec(input)) {
       out.push({ type: 'error', match: m });
