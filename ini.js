@@ -3,28 +3,17 @@
 
 
 $(document).ready(function() {
-   $("#fileinput").change(calculate);
+   $("#fileinput").change(singleFile);
  	var dropZone = document.getElementById('drop_zone');
 	dropZone.addEventListener('dragover', handleDragOver, false);
 	dropZone.addEventListener('drop', handleFileSelect, false);
 });
 
-function calculate(evt) {
+function singleFile(evt) {
   var f = evt.target.files[0]; 
 
   if (f) {
-    var r = new FileReader();
-    r.onload = function(e) { 
-      var contents = e.target.result;
-      
-      var tokens = lexer(contents);
-      var pretty = tokensToString(tokens);
-      
-      out.className = 'unhidden';
-      initialinput.innerHTML = contents;
-      finaloutput.innerHTML = pretty;
-    }
-    r.readAsText(f);
+	addFile(f);
   } else { 
     alert("Failed to load file");
   }
@@ -83,17 +72,8 @@ function lexer(input) {
   return out;
 }
 
-
-  function handleFileSelect(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-
-    var files = evt.dataTransfer.files; // FileList object.
-
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-		    var r = new FileReader();
+  function addFile(file) {
+  		    var r = new FileReader();
 			r.onload = function(e) { 
 			  var contents = e.target.result;
 			  
@@ -117,7 +97,19 @@ function lexer(input) {
 			  tableRow.appendChild(tableDataOutput);
 			  document.getElementById("tabla_resultados").appendChild(tableRow);
 			}
-			r.readAsText(f);
+			r.readAsText(file);
+  }
+  
+  function handleFileSelect(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    var files = evt.dataTransfer.files; // FileList object.
+
+    // files is a FileList of File objects. List some properties.
+    var output = [];
+    for (var i = 0, f; f = files[i]; i++) {
+		addFile(f);
     }
   }
 
