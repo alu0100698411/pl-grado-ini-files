@@ -3,29 +3,27 @@
 
 
 $(document).ready(function() {
+   	if (window.localStorage && localStorage.tabla) {
+	  tabla_resultados.innerHTML = localStorage.tabla;
+	}
+
    $("#fileinput").change(singleFile);
-	
  	var dropZone = document.getElementById('drop_zone');
 	dropZone.addEventListener('dragover', handleDragOver, false);
 	dropZone.addEventListener('drop', handleFileSelect, false);
-	if (window.localStorage && localStorage.tabla) {
-   		 document.getElementById("tabla_resultados").innerHTML = localStorage.tabla;
-        }
 });
 
 function singleFile(evt) {
   var f = evt.target.files[0]; 
 
   if (f) {
+
 	addFile(f);
 	  if (window.localStorage) localStorage.tabla = document.getElementById("tabla_resultados").innerHTML;
   } else { 
     alert("Failed to load file");
   }
 }
-
-
-//var temp = '<li> <span class = "<%= token.type %>"> <%= match %> </span>\n';
 
 
 function tokensToString(tokens) {

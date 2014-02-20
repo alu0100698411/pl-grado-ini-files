@@ -3,20 +3,21 @@
 
 
 $(document).ready(function() {
+   	if (window.localStorage && localStorage.tabla) {
+	  tabla_resultados.innerHTML = localStorage.tabla;
+	}
+
    $("#fileinput").change(singleFile);
-	
  	var dropZone = document.getElementById('drop_zone');
 	dropZone.addEventListener('dragover', handleDragOver, false);
-	dropZone.addEventListener('drop', handleFileSelect, false);
-	if (window.localStorage && localStorage.tabla) {
-   		 document.getElementById("tabla_resultados").innerHTML = localStorage.tabla;
-        }
+	dropZone.addEventListener('drop', handleFileSelect, true);
 });
 
 function singleFile(evt) {
   var f = evt.target.files[0]; 
 
   if (f) {
+
 	addFile(f);
 	  if (window.localStorage) localStorage.tabla = document.getElementById("tabla_resultados").innerHTML;
   } else { 
@@ -25,12 +26,10 @@ function singleFile(evt) {
 }
 
 
-//var temp = '<li> <span class = "<%= token.type %>"> <%= match %> </span>\n';
-
-var temp = document.getElementById("template1").innerHTML;
-
 function tokensToString(tokens) {
    var r = '';
+   var temp = document.getElementById("template1").innerHTML;
+
    for(var i=0; i < tokens.length; i++) {
      var t = tokens[i]
      var s = JSON.stringify(t, undefined, 2);

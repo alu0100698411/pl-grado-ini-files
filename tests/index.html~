@@ -7,24 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="mocha.css" />
     <script type="text/javascript" src="../underscore/underscore-min.js"></script>
-    <script type="text/javascript" id="template">
-	<% _.each(items, function(name) { %><td><%= name %></td><% }) %>
+
+    <script type="text/html" id="template1">
+	'<li> <span class = "<%= token.type %>"> <%= match %> </span>\n'
     </script>
+
   </head>
   <body>
     <div id="mocha"></div>
-    <table>
-	<tr>
-	<th>CSV string:</th> <!-- autofocus attribute is HTML5 -->
-	<td><textarea autofocus cols = "80" rows = "5" id="original"></textarea></td> 
-	 </tr>
-	</table>
+    
+
+
     <div class="centerdiv"><button type="button">Tabla</button></div>
-    <span class="output" id="finaltable"></span>
+    <table class="output" id="tabla_resultados"></table>
     
     <script src="chai.js"></script>
     <script src="mocha.js"></script>
-    <script src="../csv.js"></script>
+    <script src="../ini.js"></script>
     <script>mocha.setup('tdd')</script>
     <script src="tests.js"></script>
 
@@ -33,3 +32,5 @@
     </script>
   </body>
 </html>
+
+

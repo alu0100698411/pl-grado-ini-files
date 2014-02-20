@@ -13,9 +13,9 @@
 
      <script type="text/javascript" src="ini.js"></script>
 
-     <script type="text/html" id="template">
+     <script type="text/html" id="template1">
 	'<li> <span class = "<%= token.type %>"> <%= match %> </span>\n'
-    </script>
+     </script>
 
 
 
@@ -29,6 +29,7 @@
 
     <input type="file" id="fileinput" />
     <div id="out" class="hidden">
+    <div id="armario">"tio tio tio"</div>
     <table id="tabla_resultados">
     </table>
     </div>

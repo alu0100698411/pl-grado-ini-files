@@ -1,27 +1,48 @@
+
 var assert = chai.assert;
 
-suite('Suite CSV', function() {
-
-   test('Tabla Simple', function () {
-        original.value = '1,2,3\n4,5,6';
-        calculate();
-        var valueExpected = '<p>\n</p><table class="center" id="result">\n<tbody><tr>\n\t<td>1</td><td>2</td><td>3</td>\n    </tr>\n<tr>\n\t<td>4</td><td>5</td><td>6</td>\n    </tr>\n</tbody></table>';
-        assert.deepEqual(finaltable.innerHTML, valueExpected);
-    });
-
-    test('Tabla Compleja', function () {
-        original.value = 'Hola, caracola, "Pan, queso y miel"\nalmendras, lechuga, jamon';
-        calculate();
-        var valueExpected = '<p>\n</p><table class="center" id="result">\n<tbody><tr>\n\t<td>Hola</td><td> caracola</td><td>Pan, queso y miel</td>\n    </tr>\n<tr>\n\t<td>almendras</td><td> lechuga</td><td> jamon</td>\n    </tr>\n</tbody></table>';
-        assert.deepEqual(finaltable.innerHTML, valueExpected);
-    });
-
-    test('Error', function () {
-        original.value = '1,2,3\nq,w,e,r';
-        calculate();
-        var valueExpected = '<p>\n</p><table class="center" id="result">\n<tbody><tr>\n\t<td>1</td><td>2</td><td>3</td>\n    </tr>\n<tr class="error">\n\t<td>q</td><td>w</td><td>e</td><td>r</td>\n    </tr>\n</tbody></table>';
-        assert.deepEqual(finaltable.innerHTML, valueExpected);
-    });
+suite('Pruebas Unitarias para el lexer del parseador de ficheros tipo INI', function() {
   
+    test('Captacion del header', function() {
+        var tokens = lexer('[HOLA]');
+		assert.equal(tokens[0].type,'header');
+    });
+    
+    test('Captacion de asignaciones', function() {
+        var tokens = lexer('ejemplo = hola');
+		assert.equal(tokens[0].type,'nameEqualValue');
+    });
+    
+    test('Captacion de asignaciones multilinea', function() {
+        var tokens = lexer('ejemplo =  /  \nhola');
+		assert.equal(tokens[0].type,'nameEqualValue');
+    });
 
+    test('Captacion de asignaciones con comentarios multilinea', function() {
+        var tokens = lexer('four   = hello \  # comments work here, too  \nmultiple \        # and here !!! \nmultilines \       # and even here (OMG) \nyeah ');
+		assert.equal(tokens[0].type,'nameEqualValue');
+		assert.equal(tokens[1].type,'nameEqualComments');
+    });
+
+
+    test('Captacion de comentarios', function() {
+        var tokens = lexer(';Esto es un comentario');
+		assert.equal(tokens[0].type,'comments');
+    });
+
+
+    test('Captacion de comentarios multilinea', function() {
+        var tokens = lexer(';Esto es un comentario / \nmultilinea');
+		assert.equal(tokens[0].type,'comments');
+    });
+    test('Captacion de espacios en blanco', function() {
+        var tokens = lexer(' 	');
+		assert.equal(tokens[0].type,'blanks');
+    });
+    
+    test('Captacion de errores', function() {
+        var tokens = lexer('12345****');
+		assert.equal(tokens[0].type,'error');
+    });
+    
 });
