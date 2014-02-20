@@ -14,10 +14,12 @@ html *
  #drop_zone{
 	width:100%;
     background-color: black;
-	border:
     color: white;
     padding: 40px 50px;
     text-align: center;
+}
+ #drop_zone:hover{
+    background-color: red;
 }
 
 h1            { text-align: center; font-size: x-large; }
