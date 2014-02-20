@@ -27,11 +27,10 @@ function singleFile(evt) {
 
 //var temp = '<li> <span class = "<%= token.type %>"> <%= match %> </span>\n';
 
+var temp = document.getElementById("template1").innerHTML;
 
 function tokensToString(tokens) {
    var r = '';
-   var temp = document.getElementById("template1").innerHTML;
-
    for(var i=0; i < tokens.length; i++) {
      var t = tokens[i]
      var s = JSON.stringify(t, undefined, 2);

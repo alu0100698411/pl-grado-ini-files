@@ -13,9 +13,9 @@
 
      <script type="text/javascript" src="ini.js"></script>
 
-     <script type="text/html" id="template1">
+     <script type="text/html" id="template">
 	'<li> <span class = "<%= token.type %>"> <%= match %> </span>\n'
-     </script>
+    </script>
 
 
 
