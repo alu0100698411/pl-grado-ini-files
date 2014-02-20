@@ -36,9 +36,9 @@ function lexer(input) {
   var blanks         = /^\s+/;
   var iniheader      = /^\[([^\]\r\n]+)\]/;
   var comments       = /^[;#](.*)/;
-  var nameEqualValue = /^([^=;\r\n]+)=([^;\r\n]*)/;
-  var multiLineSupport = /\\$/;
-  var multiLine = /^([^=;\r\n\\]+)(?:\\)?/;
+  var nameEqualValue = /^([^=;\r\n]+)=([^;\r\n\\#]*)(?:#.*)?/;
+  var multiLine = /^\\\s*(?:#[^\n]*)?\n([^\\;#\r\n]*)(?:#.*)?/;;
+  var multiLineComment = /(#[^\n]*)/g ;
   var any            = /^(.|\n)+/;
 
   var out = [];
@@ -58,18 +58,35 @@ function lexer(input) {
       out.push({ type: 'comments', match: m });
     }
 	else if (m = nameEqualValue.exec(input)) {
-	  var line = m;
-	  input = input.substr(m.index+m[0].length);
-	  while(m = multiLineSupport.exec(m[0])){
-			if(m = blanks.exec(input)){//LIMPIAMOS EL RETORNO DE CARRO DEL INPUT
-				input = input.substr(m.index+m[0].length);
-			}
-			if(m = multiLine.exec(input)){
-				input = input.substr(m.index+m[0].length);
-				line.push.apply(line, m);			
-			}				
-	  }
-	  out.push({ type: 'nameEqualValue', match: line });
+		var linea = m;
+		var comentarios = new Array();
+		
+		input = input.substr(m.index+m[0].length);
+
+		while (m = multiLine.exec(input)) {
+			linea[0] += m[0];
+			linea[linea.length-1] += m[1];
+			input = input.substr(m.index+m[0].length);
+		}
+		
+		while(m = multiLineComment.exec(linea[0])){
+			m[0] = m[0].replace(/\n/g,' ');
+			m[0] = m[0].replace(/\r/g,' ');			
+			comentarios.push(m[0]);
+		}
+		
+		linea[0] = linea[0].replace(/\\/g,' ');
+		linea[0] = linea[0].replace(/\n/g,' ');
+		linea[0] = linea[0].replace(/\r/g,' ');
+		
+		out.push({ type: 'nameEqualValue', match: linea });
+		
+		if(comentarios.length!=0){
+			comentarios.unshift(linea[0]);
+			out.push({ type: 'nameEqualComments', match: comentarios });
+		}
+		
+		linea = null;
     }
     else if (m = any.exec(input)) {
       out.push({ type: 'error', match: m });
@@ -106,7 +123,8 @@ function lexer(input) {
 			  tableDataOutput.appendChild(output);
 			  tableRow.appendChild(tableDataInput);
 			  tableRow.appendChild(tableDataOutput);
-			  document.getElementById("tabla_resultados").appendChild(tableRow);
+			  var tabla = document.getElementById("tabla_resultados");
+			  tabla.insertBefore(tableRow,tabla.firstChild);
 			}
 			r.readAsText(file);
   }
