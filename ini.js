@@ -1,13 +1,13 @@
 "use strict"; // Use ECMAScript 5 strict mode in browsers that support it
 
 
-
 $(document).ready(function() {
-   	if (window.localStorage && localStorage.tabla) {
-	  tabla_resultados.innerHTML = localStorage.tabla;
-	}
+
 
    $("#fileinput").change(singleFile);
+	if (window.localStorage && localStorage.tabla ){
+		document.getElementById("tabla_resultados").innerHTML = localStorage.tabla;
+	} 
  	var dropZone = document.getElementById('drop_zone');
 	dropZone.addEventListener('dragover', handleDragOver, false);
 	dropZone.addEventListener('drop', handleFileSelect, false);
@@ -180,3 +180,9 @@ function lexer(input) {
     evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
   }
 
+window.onload = function() {
+  // If the browser supports localStorage and we have some stored data
+  if (window.localStorage && localStorage.tabla) {
+    document.getElementById("tabla_resultados").innerHTML = localStorage.tabla;
+  }
+};

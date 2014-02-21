@@ -27,9 +27,10 @@
 	<br/>
 
 
-    <input type="file" id="fileinput" />
+    <input type="file" id="fileinput" /><br/>
+    <a href=tests/index.html>Enlace a la pagina de tests</a>
+
     <div id="out" class="hidden">
-    <div id="armario">"tio tio tio"</div>
     <table id="tabla_resultados">
     </table>
     </div>
