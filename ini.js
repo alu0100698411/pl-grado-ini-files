@@ -2,27 +2,43 @@
 
 
 $(document).ready(function() {
-
-
-   $("#fileinput").change(singleFile);
-	if (window.localStorage && localStorage.tabla ){
-		document.getElementById("tabla_resultados").innerHTML = localStorage.tabla;
-	} 
+   $("#fileinput").change(addIni);
  	var dropZone = document.getElementById('drop_zone');
 	dropZone.addEventListener('dragover', handleDragOver, false);
 	dropZone.addEventListener('drop', handleFileSelect, false);
 });
 
-function singleFile(evt) {
-  var f = evt.target.files[0]; 
+function addIni(evt) {
+	var f 
 
-  if (f) {
+	if(evt.type != "drop")
+		f = evt.target.files[0]; 
+	else
+		f = evt.dataTransfer.files[0];
 
-	addFile(f);
-	  if (window.localStorage) localStorage.tabla = document.getElementById("tabla_resultados").innerHTML;
-  } else { 
-    alert("Failed to load file");
-  }
+	if (f){
+		var r = new FileReader();
+		r.onload = function(e) { 
+			var contents = e.target.result;
+
+			var tokens = lexer(contents);
+			var pretty = tokensToString(tokens);
+
+			out.className = 'tabla_resultados';
+
+			if (window.localStorage) localStorage.initialinput = contents;
+				initialinput.innerHTML = contents;
+			if (window.localStorage) localStorage.finaloutput = pretty;
+				finaloutput.innerHTML = pretty;
+		}
+		r.readAsText(f);
+		added_file.innerHTML = f.name+' '+f.size+' bytes, last modified:'+f.lastModifiedDate.toLocaleDateString();
+		if (window.localStorage){
+			localStorage.added_file = added_file.innerHTML ;	
+		} 
+	}else { 
+		alert("Failed to load file");
+	}
 }
 
 
@@ -76,9 +92,7 @@ function lexer(input) {
 		}
 		linea[0] += '"';
 		input = input.substr(1);	
-		linea[0] = linea[0].replace(/\\/g,' ');
-		linea[0] = linea[0].replace(/\n/g,' ');
-		linea[0] = linea[0].replace(/\r/g,' ');
+
 		linea[2] = linea[2].replace(/\\/g,' ');
 		linea[2] = linea[2].replace(/\n/g,' ');
 		linea[2] = linea[2].replace(/\r/g,' ');
@@ -104,9 +118,6 @@ function lexer(input) {
 			comentarios.push(m[0]);
 		}
 		
-		linea[0] = linea[0].replace(/\\/g,' ');
-		linea[0] = linea[0].replace(/\n/g,' ');
-		linea[0] = linea[0].replace(/\r/g,' ');
 		
 		out.push({ type: 'nameEqualValue', match: linea });
 		
@@ -128,61 +139,37 @@ function lexer(input) {
   }
   return out;
 }
-
-  function addFile(file) {
-  		    var r = new FileReader();
-			r.onload = function(e) { 
-			  var contents = e.target.result;
-			  
-			  var tokens = lexer(contents);
-			  var pretty = tokensToString(tokens);
-			  
-			  out.className = 'unhidden';
-			  var tableRow = document.createElement('tr');
-			  var tableDataInput = document.createElement('td');
-			  var tableDataOutput = document.createElement('td');
-			  var input = document.createElement('pre');
-			  input.className = 'input';
-			  input.innerHTML = contents;
-			  var output = document.createElement('pre');
-			  output.className = 'output';
-			  output.innerHTML = pretty;
-
-			  tableDataInput.appendChild(input);
-			  tableDataOutput.appendChild(output);
-			  tableRow.appendChild(tableDataInput);
-			  tableRow.appendChild(tableDataOutput);
-			  var tabla = document.getElementById("tabla_resultados");
-			  tabla.insertBefore(tableRow,tabla.firstChild);
-			}
-			r.readAsText(file);
-  }
   
-  function handleFileSelect(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
+function handleFileSelect(evt) {
+	evt.stopPropagation();
+	evt.preventDefault();
 
-    var files = evt.dataTransfer.files; // FileList object.
+	var files = evt.dataTransfer.files; // FileList object.
+	
+	addIni(evt);
+	 evt.target.style.background = "#CEE765";
 
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-		addFile(f);
-    }
-	if (window.localStorage){
-		localStorage.tabla = document.getElementById("tabla_resultados").innerHTML;
-	}
-  }
+}
 
-  function handleDragOver(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-  }
-
+function handleDragOver(evt) {
+	evt.stopPropagation();
+	evt.preventDefault();
+	evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+	  evt.target.style.background = "#A3D84A"; 
+}
+    
+  
+//Añadir Local Store
 window.onload = function() {
   // If the browser supports localStorage and we have some stored data
-  if (window.localStorage && localStorage.tabla) {
-    document.getElementById("tabla_resultados").innerHTML = localStorage.tabla;
+  if (window.localStorage && localStorage.initialinput) {
+    document.getElementById("initialinput").innerHTML = localStorage.initialinput;
+    document.getElementById("out").className = "none";
+  }
+  if (window.localStorage && localStorage.finaloutput) {
+    document.getElementById("finaloutput").innerHTML = localStorage.finaloutput;
+  }
+  if (window.localStorage && localStorage.added_file) {
+    document.getElementById("added_file").innerHTML = localStorage.added_file;
   }
 };
