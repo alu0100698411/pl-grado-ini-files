@@ -1,12 +1,14 @@
 @charset "utf-8";
 
-body {
-  margin:0;
-}
-
 #mocha {
+  color:#ffffff;
+ -webkit-border-radius: 15px;
+-moz-border-radius: 15px;
+border-radius: 15px;
+  background-color:#333;
   font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: 60px 50px;
+  margin-top: 60px;
+  margin-bottom: 40px;
 }
 
 #mocha ul,
@@ -56,6 +58,8 @@ body {
 
 #mocha .suite {
   margin-left: 15px;
+  padding-bottom:10px;
+  padding-right: 10px;
 }
 
 #mocha .test {
@@ -253,6 +257,7 @@ body {
   height: 40px;
 }
 
+#mocha pre{background-color:#ffffff; color:#000000;}
 #mocha code .comment { color: #ddd; }
 #mocha code .init { color: #2f6fad; }
 #mocha code .string { color: #5890ad; }

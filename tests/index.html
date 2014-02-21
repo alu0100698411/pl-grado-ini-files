@@ -5,19 +5,62 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="mocha.css" />
-    <script type="text/javascript" src="../underscore/underscore-min.js"></script>
+    <link rel="stylesheet" href="../global.css" />
+	<link rel="stylesheet" href="mocha.css" />
+	<script type="text/javascript" src="../ini.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-    <script type="text/html" id="template1">
-	'<li> <span class = "<%= token.type %>"> <%= match %> </span>\n'
-    </script>
+	<script type="text/html" id="template1">
+		<li> <span class = "<%= token.type %>"> <%= match %> </span>
+	</script>
+
 
   </head>
   <body>
-    <div id="mocha"></div>
+	<div id="mocha"></div>
+	<div id="wrapper">
+		<header>
+            <img src="../logo.png" alt="INI Logo">
+        </header>
+		<section>
+			<h1>INI File Parser</h1>
+			<div class="leyenda">  
+				<ul>  
+					<li class="header"><span>HEADER</span></li>  
+					<li class="comments"><span>COMMENTS</span></li>  
+					<li class="blanks"><span>BLANKS</span></li>  
+					<li class="nameEqualValue"><span>VARS</span></li>  
+					<li class="nameEqualComments"><span>VCOMMENTS</span></li>  
+					<li class="error"><span>ERRORS</span></li>  
+					
+				</ul>  
+			</div> 			
+			<div id="buttons"><a href="https://github.com/alu0100698411/pl-grado-ini-files" class="button">GITHUB</a> <a href="tests/index.html" class="button">TESTS</a></div>
+			<div id="drop_zone">Drop a file here</div>
+			<br/>
 
-    <table class="output" id="tabla_resultados"></table>
-    
+			<h2>...or select it for parsing</h2>
+			<input type="file" id="fileinput" /><br/>
+			<span id="last_file">Last file added: <span id="added_file"></span></span><br/>
+		
+			
+
+		</section>
+	</div>
+	<div id="out" class="tabla_resultados">
+		<table>
+		<tr><th>Original</th><th>Tokens</th></tr>
+		<tr>
+		<td>
+		  <pre class="input" id="initialinput"></pre>
+		</td>
+		<td>
+		  <pre class="output" id="finaloutput"></pre>
+		</td>
+		</tr>
+		</table>
+	</div>    
     <script src="chai.js"></script>
     <script src="mocha.js"></script>
     <script src="../ini.js"></script>

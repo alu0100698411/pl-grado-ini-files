@@ -14,25 +14,56 @@
      <script type="text/javascript" src="ini.js"></script>
 
      <script type="text/html" id="template1">
-	'<li> <span class = "<%= token.type %>"> <%= match %> </span>\n'
+		<li class = "<%= token.type %>"> <span > <%= match %> </span>
      </script>
 
 
 
   </head>
   <body>
-    <h1>INI files</h1>
-	
-	<div id="drop_zone">Drop files here</div>
-	<br/>
+	<div id="wrapper">
+		<header>
+            <img src="logo.png" alt="INI Logo">
+        </header>
+		<section>
+			<h1>INI File Parser</h1>
+			<div class="leyenda">  
+				<ul>  
+					<li class="header"><span>HEADER</span></li>  
+					<li class="comments"><span>COMMENTS</span></li>  
+					<li class="blanks"><span>BLANKS</span></li>  
+					<li class="nameEqualValue"><span>VARS</span></li>  
+					<li class="nameEqualComments"><span>VCOMMENTS</span></li>  
+					<li class="error"><span>ERRORS</span></li>  
+					
+				</ul>  
+			</div> 			
+			<div id="buttons"><a href="https://github.com/alu0100698411/pl-grado-ini-files" class="button">GITHUB</a> <a href="tests/index.html" class="button">TESTS</a></div>
+			<div id="drop_zone">Drop a file here</div>
+			<br/>
 
+			<h2>...or select it for parsing</h2>
+			<input type="file" id="fileinput" /><br/>
+			<span id="last_file">Last file added: <span id="added_file"></span></span><br/>
+		
+			
 
-    <input type="file" id="fileinput" /><br/>
-    <a href=tests/index.html>Enlace a la pagina de tests</a>
+		</section>
+	</div>
 
-    <div id="out">
-    <table id="tabla_resultados">
-    </table>
-    </div>
+	<div id="out" class="tabla_resultados">
+		<table>
+		<tr><th>Original</th><th>Tokens</th></tr>
+		<tr>
+		<td>
+		  <pre class="input" id="initialinput"></pre>
+		</td>
+		<td>
+		  <pre class="output" id="finaloutput"></pre>
+		</td>
+		</tr>
+		</table>
+	</div>    
+
   </body>
 </html>
